@@ -10,14 +10,12 @@ else:
     with open(p7bfile, 'rb') as p7f:
         p7b = cms.ContentInfo.load(p7f.read())
 
-    #print("Number of certs: ", len(p7b['content']['certificates']))
-
-    for fpkicert in p7b['content']['certificates']:
-        try:
-            cert = x509.Certificate.load(fpkicert.dump())
-        except Exception as e:
-            print("Error loading certificate from p7b: ", e)
-            continue
+        for fpkicert in p7b['content']['certificates']:
+            try:
+                cert = x509.Certificate.load(fpkicert.dump())
+            except Exception as e:
+                print("Error loading certificate from p7b: ", e)
+                continue
     
         cert_subj_rdn_type = list(cert.subject.native.keys())[-1]
 
@@ -42,3 +40,5 @@ else:
                 certfile.write(pem_bytes)
         except Exception as e:
             print("Unable to open file ", filename, ": ", e)
+
+        print("Number of certs: ", len(p7b['content']['certificates']))
