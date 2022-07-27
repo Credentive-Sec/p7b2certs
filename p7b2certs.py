@@ -16,29 +16,29 @@ else:
             except Exception as e:
                 print("Error loading certificate from p7b: ", e)
                 continue
-    
-        cert_subj_rdn_type = list(cert.subject.native.keys())[-1]
+        
+            cert_subj_rdn_type = list(cert.subject.native.keys())[-1]
 
-        cert_subj_rdn_value = cert.subject.native[cert_subj_rdn_type]
+            cert_subj_rdn_value = cert.subject.native[cert_subj_rdn_type]
 
-        if (isinstance(cert_subj_rdn_value, list)):
-            cert_subj_rdn_value = cert_subj_rdn_value[-1]
+            if (isinstance(cert_subj_rdn_value, list)):
+                cert_subj_rdn_value = cert_subj_rdn_value[-1]
 
-        cert_issuer_rdn_type = list(cert.issuer.native.keys())[-1]
+            cert_issuer_rdn_type = list(cert.issuer.native.keys())[-1]
 
-        cert_issuer_rdn_value = cert.issuer.native[cert_issuer_rdn_type]
+            cert_issuer_rdn_value = cert.issuer.native[cert_issuer_rdn_type]
 
-        if(isinstance(cert_issuer_rdn_value, list)):
-            cert_issuer_rdn_value = cert_issuer_rdn_value[-1]
+            if(isinstance(cert_issuer_rdn_value, list)):
+                cert_issuer_rdn_value = cert_issuer_rdn_value[-1]
 
-        filename = f"exports/{cert_subj_rdn_value}--to--{cert_issuer_rdn_value}--{cert.serial_number}.cer"
+            filename = f"exports/{cert_issuer_rdn_value}--to--{cert_subj_rdn_value}--{cert.serial_number}.cer"
 
-        print("Writing ", filename)
-        try:
-            with open(filename, 'wb') as certfile:
-                pem_bytes = pem.armor('CERTIFICATE', cert.dump())
-                certfile.write(pem_bytes)
-        except Exception as e:
-            print("Unable to open file ", filename, ": ", e)
+            print("Writing ", filename)
+            try:
+                with open(filename, 'wb') as certfile:
+                    pem_bytes = pem.armor('CERTIFICATE', cert.dump())
+                    certfile.write(pem_bytes)
+            except Exception as e:
+                print("Unable to open file ", filename, ": ", e)
 
         print("Number of certs: ", len(p7b['content']['certificates']))
